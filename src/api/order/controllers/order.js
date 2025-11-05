@@ -249,6 +249,43 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
 
     ctx.send({ received: true });
   },
+  async razorpaySuccess(ctx) {
+    try {
+      const { orderId, paymentId, userId, email, cartItems = [], amount } = ctx.request.body;
+
+      if (!userId || !email || !cartItems.length) {
+        return ctx.badRequest("Missing required fields");
+      }
+
+      // Create order in Strapi (like Stripe webhook)
+      const order = await strapi.entityService.create("api::order.order", {
+        data: {
+          orderNumber: `RZP-${Date.now()}`,
+          totalAmount: amount,
+          currency: "INR",
+          paymentMethod: "upi",
+          paymentProvider: "razorpay",
+          paymentStatus: "paid",
+          razorpayOrderId: orderId,
+          razorpayPaymentId: paymentId,
+          deliveryEmail: email,
+          user: userId,
+          cartSnapshot: cartItems,
+          status: "processing",
+          deliveryStatus: "pending",
+        },
+      });
+
+      // 🕹️ assign keys & send email (reuse same logic from webhook)
+      await strapi.controller("api::order.order").assignKeysAndSendEmail(order, cartItems);
+
+      ctx.send({ success: true, orderId: order.id });
+    } catch (err) {
+      strapi.log.error("❌ Razorpay order save failed:", err);
+      return ctx.internalServerError("Razorpay order creation failed");
+    }
+  },
+
 }));
 
 

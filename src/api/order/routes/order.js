@@ -30,6 +30,12 @@ module.exports = {
       },
     },
     {
+      method: 'POST',
+      path: '/orders/razorpay/success',
+      handler: 'order.razorpaySuccess',
+      config: { auth: false },
+    },
+    {
       method: 'GET',
       path: '/orders',
       handler: 'order.find',

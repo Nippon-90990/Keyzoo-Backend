@@ -1,12 +1,20 @@
+
+// config/middlewares.js
 module.exports = [
-  'strapi::logger',
   'strapi::errors',
   'strapi::security',
   'strapi::cors',
   'strapi::poweredBy',
+  'strapi::logger',
   'strapi::query',
-  'strapi::body',
+  {
+    name: 'strapi::body',
+    config: {
+      includeUnparsed: true, // keep Symbol.for('unparsedBody')
+    },
+  },
   'strapi::session',
   'strapi::favicon',
   'strapi::public',
 ];
+

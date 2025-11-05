@@ -1,10 +1,10 @@
 {
   "kind": "collectionType",
-  "collectionName": "category_banners",
+  "collectionName": "game_banners",
   "info": {
-    "singularName": "category-banner",
-    "pluralName": "category-banners",
-    "displayName": "Category Banner"
+    "singularName": "game-banner",
+    "pluralName": "game-banners",
+    "displayName": "GameBanner"
   },
   "options": {
     "draftAndPublish": true
@@ -17,19 +17,15 @@
     "subtitle": {
       "type": "string"
     },
-    "desktopImage": {
+    "image": {
       "type": "media",
       "multiple": false,
       "allowedTypes": [
         "images"
       ]
     },
-    "mobileImage": {
-      "type": "media",
-      "multiple": false,
-      "allowedTypes": [
-        "images"
-      ]
+    "link": {
+      "type": "string"
     }
   }
 }
